@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge 1+2</title>
+  </head>
+
+  <body>
+    <script>
+      var Data1 = [
+        (Mark = {
+          mass: 78,
+          height: 1.69,
+        }),
+        (John = {
+          mass: 92,
+          height: 1.95,
+        }),
+      ];
+      var Data2 = [
+        (Mark = {
+          mass: 95,
+          height: 1.88,
+        }),
+        (John = {
+          mass: 85,
+          height: 1.76,
+        }),
+      ];
+
+      function cal_BMI(a) {
+        return a.mass / a.height ** 2;
+      }
+
+      var markHigherBMI = function (bmiMark, bmiJohn) {
+        if (bmiMark > bmiJohn) return true;
+        return false;
+      };
+
+      var outputBIM = function (Mark, John) {
+        if (markHigherBMI(cal_BMI(Mark), cal_BMI(John)))
+          console.log("Mark's BMI is higher than John's!");
+        else console.log("John's BMI is higher than Mark's!");
+      };
+
+      var compareOutputBIM = function (Mark, John) {
+        if (markHigherBMI(cal_BMI(Mark), cal_BMI(John)))
+          console.log(
+            "Mark's BMI(" +
+              cal_BMI(Mark).toFixed(2) +
+              ") is higher than John's(" +
+              cal_BMI(John).toFixed(2) +
+              ")!"
+          );
+        else
+          console.log(
+            "John's BMI(" +
+              cal_BMI(John).toFixed(2) +
+              ") is higher than Mark's(" +
+              cal_BMI(Mark).toFixed(2) +
+              ")!"
+          );
+      };
+      console.log("Coding Challenge #1");
+      for (let index = 0; index < Data1.length; index++) {
+        console.log(Data1[index]);
+      }
+
+      for (let index = 0; index < Data2.length; index++) {
+        console.log(Data2[index]);
+      }
+
+      console.log("BIM of Mark: " + cal_BMI(Mark));
+      console.log("BIM of John: " + cal_BMI(John));
+      console.log(markHigherBMI(cal_BMI(Data1[0]), cal_BMI(Data1[1])));
+      console.log(markHigherBMI(cal_BMI(Data2[0]), cal_BMI(Data2[1])));
+
+      console.log("Coding Challenge #2");
+      console.log(
+        "1. Print a nice output to the console, saying who has the higher BMI"
+      );
+      console.log("Data 1");
+      outputBIM(Data1[0], Data1[1]);
+      console.log("Data 2");
+      outputBIM(Data2[0], Data2[1]);
+      console.log(
+        "2. Use a template literal to include the BMI values in the outputs"
+      );
+      console.log("Data 1");
+      compareOutputBIM(Data1[0], Data1[1]);
+      console.log("Data 2");
+      compareOutputBIM(Data2[0], Data2[1]);
+    </script>
+  </body>
+</html>

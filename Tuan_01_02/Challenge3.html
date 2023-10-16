@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge3</title>
+  </head>
+  <body>
+    <script>
+      (Dolphins1 = [96, 108, 89]), (Koalas1 = [88, 91, 110]);
+
+      (DolphinsBo1 = [97, 112, 101]), (KoalasBo1 = [109, 95, 123]);
+
+      (DolphinsBo2 = [97, 112, 101]), (KoalasBo2 = [109, 95, 106]);
+
+      function calculateAverage(scores) {
+        var total=scores.reduce((acc,score)=>acc+score,0);
+        return (total/scores.length).toFixed(2)
+      }
+      // console.log("Dolphins Average: "+calculateAverage(Dolphins1));
+      // console.log("Dolphins Average: "+calculateAverage(DolphinsBo1));
+      // console.log("Dolphins Average: "+calculateAverage(DolphinsBo2));
+      // console.log("Koalas Average: "+calculateAverage(Koalas1));
+      // console.log("Koalas Average: "+calculateAverage(KoalasBo1));
+      // console.log("Koalas Average: "+calculateAverage(KoalasBo2));
+
+      function checkWinner(dolphinsScores,koalasScores) {
+        var dolphinsAverage=calculateAverage(dolphinsScores)
+        var koalasAverage=calculateAverage(koalasScores)
+        if(dolphinsAverage>koalasAverage)
+          console.log("Dolphins win!");
+        else if(dolphinsAverage<koalasAverage)
+          console.log("Koalas win!");
+        else if(dolphinsAverage==koalasAverage)
+          console.log("It's tie!");
+      }
+      console.log("Data 1:");
+      checkWinner(Dolphins1, Koalas1);
+      console.log("Data Bonus 1:");
+      checkWinner(DolphinsBo1, KoalasBo1);
+      console.log("Data Bonus 2:");
+      checkWinner(DolphinsBo2, KoalasBo2);
+
+
+      function checkWinnerContext(dolphinsScores,koalasScores) {
+        var dolphinsAverage=calculateAverage(dolphinsScores)
+        var koalasAverage=calculateAverage(koalasScores)
+        //Bonus 1
+        if (dolphinsAverage >= 100 && dolphinsAverage > koalasAverage) {
+          console.log("Dolphins win!");
+        } else if (koalasAverage >= 100 && koalasAverage > dolphinsAverage) {
+          console.log("Koalas win!");
+        } else if (dolphinsAverage >= 100 && koalasAverage >= 100 && dolphinsAverage === koalasAverage) {
+          console.log("It's tie!");
+        } 
+        //Bonus 2
+        else {
+          console.log("No team wins the trophy.");
+        }
+      }
+      console.log("Data 1:");
+      checkWinnerContext(Dolphins1, Koalas1);
+      console.log("Data Bonus 1:");
+      checkWinnerContext(DolphinsBo1, KoalasBo1);
+      console.log("Data Bonus 2:");
+      checkWinnerContext(DolphinsBo2, KoalasBo2);
+
+    </script>
+  </body>
+</html>
