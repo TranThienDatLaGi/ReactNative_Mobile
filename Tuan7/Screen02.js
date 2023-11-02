@@ -5,6 +5,7 @@ export default function App() {
   let navigation = useNavigation();
   let route = useRoute();
   let todolist = route.params.todolist;
+  let lenght = route.params.lenght;
   let user0 = [];
   user0 = todolist.todo;
   let [valueSearch, setValueSearch] = useState('')
@@ -27,21 +28,11 @@ export default function App() {
     newCheckboxes[index] = !newCheckboxes[index];
     setCheckboxes(newCheckboxes);
   };
-  const updatevalue = (index, value)=>{ 
-    todolist.todo = todolist.todo.map(todo => {
-        if (todo.id === index.id) { 
-          return { id: index.id, state: value };
-        }
-        return todo;
-      })
-  }
   const handleButtonPress = (index) => {
     handleCheckboxPress(index.id);
-    const handleUpdate = (index) => { 
-      const value = !checkboxes[index.id]
-     updatevalue(index,value)
+    index.state = !checkboxes[index.id]
       fetch('https://65435c0201b5e279de2039f4.mockapi.io/api/v1/todolist/' + todolist.id, {
-          method: 'PATCH',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json', // Đặt kiểu dữ liệu của nội dung
           },
@@ -55,7 +46,6 @@ export default function App() {
           }
         })
         .catch((error) => console.log(error))
-      };
   };
   let Item = ({ i }) => {
     if (i.state == false) {  
@@ -129,7 +119,7 @@ export default function App() {
        
       
       <TouchableOpacity style={{ alignItems: 'center' }}
-        onPress={() => { navigation.navigate("Screen03", {todolist:todolist})}}
+        onPress={() => { navigation.navigate("Screen03", { todolist: todolist, lenght:lenght})}}
       >
         <Image source={require('./assets/plus.png')} style={{height:60,width:60,resizeMode:'contain'}}></Image>
       </TouchableOpacity>
