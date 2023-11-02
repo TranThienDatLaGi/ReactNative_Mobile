@@ -32,7 +32,8 @@ export default function App() {
             () => {
               for (let i = 0; i < DATA.length; i++) {
                 if (DATA[i].email == emailIn) {
-                  navigation.navigate("Screen02", { todolist: DATA[i] })
+                  const lenght=DATA[i].todo.lenght
+                  navigation.navigate("Screen02", { todolist: DATA[i],lenght:lenght })
                   console.log(DATA[i]);
                 }
               }
