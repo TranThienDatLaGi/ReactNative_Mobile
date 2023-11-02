@@ -5,8 +5,33 @@ export default function App() {
   let navigation = useNavigation();
   let route = useRoute();
   let todolist = route.params.todolist;
+   let lenght = route.params.lenght;
+  let user = JSON.stringify(todolist)
+  let haha= JSON.parse(user)
+  
   const [title, setTitle] = useState("");
-  // let todolist = JSON.parse(user);
+  const addData = () => { 
+    const newTodo = { id:length+1+"", state: false, desc: title }
+    todolist.todo.push(newTodo);
+    fetch('https://65435c0201b5e279de2039f4.mockapi.io/api/v1/todolist/' + todolist.id, {
+  method: 'PUT', // Or 'PUT' depending on your server's support
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ todo: todolist.todo }), // Send the updated items array
+})
+.then(response => {
+  if (response.ok) {
+    // Handle successful update
+  } else {
+    // Handle error
+  }
+})
+.catch(error => {
+  // Handle connection or processing errors
+});
+    navigation.navigate("Screen02", { todolist: todolist });
+  }
   return (
     <View style={styles.container}>
       <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',padding:10}}>
@@ -35,37 +60,10 @@ export default function App() {
       </View>
       <View style={{ marginTop: 50 }}></View>    
       
-      <TouchableOpacity style={{ alignItems: 'center',backgroundColor:'#00BDD6',height:50,borderRadius:20,justifyContent:'center',marginLeft:70,marginRight:70}}
-        onPress={() => { navigation.navigate("Screen02",{todolist:todolist  })}}
+      <TouchableOpacity style={{ alignItems: 'center', backgroundColor: '#00BDD6', height: 50, borderRadius: 20, justifyContent: 'center', marginLeft: 70, marginRight: 70 }}
+        onPress={addData}
       >
         <Text style={{ textAlign: 'center', color: 'white', fontSize: 17 }}
-         onPress={() => {
-          if (title === "") return alert("Please input your job");
-          else {
-            fetch(
-              "https://65435c0201b5e279de2039f4.mockapi.io/api/v1/todolist/todo",
-              {
-                method: "POST",
-                headers: {
-                  Accept: "application/json",
-                  "Content-type": "application/json",
-                },
-                body: JSON.stringify({
-                  state: false,
-                  desc: title,
-                }),
-              }
-            )
-              .then((response) => response.json())
-              .then((json) => {
-                if (json != null)
-                  setTimeout(() => {
-                    navigation.goBack();
-                  }, 800);
-              })
-              .catch((error) => console.error(error));
-          }
-        }}
         >FINISH</Text>
       </TouchableOpacity>
     </View>
