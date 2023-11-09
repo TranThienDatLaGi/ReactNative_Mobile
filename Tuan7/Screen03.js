@@ -1,24 +1,29 @@
 import { useNavigation,useRoute } from '@react-navigation/native';
-import React, { useState } from 'react';
+import { useState,useContext } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, ScrollView, FlatList } from 'react-native';
+import { MyContext } from './App';
 export default function App() {
   let navigation = useNavigation();
-  let route = useRoute();
-  let todolist = route.params.todolist;
-   let lenght = route.params.lenght;
-  let user = JSON.stringify(todolist)
-  let haha= JSON.parse(user)
+  let { todolist, setTodolist } = useContext(MyContext)
+  let user0 = [];
+  user0 = todolist.todo;
+  const objectKeys = [];
+    for (let objectKey in todolist.todo) {
+        objectKeys.push(objectKey);
+    }
+  let lenght = objectKeys.length;
   
   const [title, setTitle] = useState("");
+
   const addData = () => { 
-    const newTodo = { id:length+1+"", state: false, desc: title }
+    const newTodo = { id:(lenght+1+""), state: false, desc: title }
     todolist.todo.push(newTodo);
     fetch('https://65435c0201b5e279de2039f4.mockapi.io/api/v1/todolist/' + todolist.id, {
-  method: 'PUT', // Or 'PUT' depending on your server's support
-  headers: {
+    method: 'PUT', 
+    headers: {
     'Content-Type': 'application/json',
   },
-  body: JSON.stringify({ todo: todolist.todo }), // Send the updated items array
+  body: JSON.stringify({ todo: todolist.todo }),
 })
 .then(response => {
   if (response.ok) {
@@ -30,7 +35,7 @@ export default function App() {
 .catch(error => {
   // Handle connection or processing errors
 });
-    navigation.navigate("Screen02", { todolist: todolist });
+    navigation.navigate("Screen02");
   }
   return (
     <View style={styles.container}>
