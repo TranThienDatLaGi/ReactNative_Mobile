@@ -1,26 +1,41 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, ScrollView, FlatList } from 'react-native';
+import { useEffect, useState, useContext} from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, FlatList } from 'react-native';
+import { MyContext } from './App';
 export default function App() {
   let navigation = useNavigation();
-  let route = useRoute();
-  let todolist = route.params.todolist;
-  let lenght = route.params.lenght;
-  let user0 = [];
-  user0 = todolist.todo;
+  let { todolist, setTodolist } = useContext(MyContext)
+  let [user0, setUser0] = useState(todolist.todo)
   let [valueSearch, setValueSearch] = useState('')
   let [userIn, setUserIn] = useState(user0)
   
-  useEffect(
+  let update= (id)=>{
+    fetch("https://65435c0201b5e279de2039f4.mockapi.io/api/v1/todolist/"+id)
+    .then(response=>{
+      if (response.ok)
+        return response.json()
+    })
+    .then(dat=>{
+      setTodolist(dat)
+      setUserIn(dat.todo)
+    })
+  }
+if (!(user0 === todolist.todo)){
+    setUserIn(todolist.todo)
+    setUser0(todolist.todo)
+  }
+  
+useEffect(
     ()=>{
-      let temp = user0.filter(i => {
+      let temp = todolist.todo.filter(i => {
         return i.desc.includes(valueSearch)
       })
       if (valueSearch != "")
         setUserIn(temp)
-      else setUserIn(user0)
+      else setUserIn(todolist.todo)
     }, [valueSearch]
-  ) 
+  )
+
   const [checkboxes, setCheckboxes] = useState([false, false, false, false,false,false]);
 
   const handleCheckboxPress = (index) => {
@@ -34,9 +49,9 @@ export default function App() {
       fetch('https://65435c0201b5e279de2039f4.mockapi.io/api/v1/todolist/' + todolist.id, {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json', // Đặt kiểu dữ liệu của nội dung
+            'Content-Type': 'application/json', 
           },
-          body: JSON.stringify({ todo: todolist.todo }), // Truyền dữ liệu mới dưới dạng chuỗi JSON
+          body: JSON.stringify({ todo: todolist.todo }), 
         })
         .then(response => {
           if (response.ok) {
@@ -47,40 +62,89 @@ export default function App() {
         })
         .catch((error) => console.log(error))
   };
+
   let Item = ({ i }) => {
     if (i.state == false) {  
       checkboxes[i.id]=false;
       return (
-        <View style={{ flex: 1, height: 30, backgroundColor: '#6AEBF9', marginBottom: 10, borderRadius: 10, justifyContent: 'center' }}>
-          <TouchableOpacity style={{ flex: 1, position: 'absolute', right: 10, zIndex: 99 }}>
-            <Image style={{ width: 20, height: 20, resizeMode: 'contain' }} source={require('./assets/edit.png')}></Image>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
+        <View style={{ flex: 1, height: 30, backgroundColor: '#6AEBF9', marginBottom: 10, borderRadius: 10, justifyContent: 'center',flexDirection:'row',justifyContent:'space-between' }}>
+          <TouchableOpacity style={{ flex: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
             onPress={() => handleButtonPress(i)}
           >
             {checkboxes[i.id] && <Image style={{ left: 20, width: 20, height: 20, resizeMode: 'contain', position: 'absolute' }} source={require('./assets/check.png')}></Image>}
             {!checkboxes[i.id] && <Image style={{ left: 20, width: 20, height: 20, resizeMode: 'contain', position: 'absolute' }} source={require('./assets/Frame.png')}></Image>}
             <Text style={{ flex: 1, padding: 20, marginLeft: 40 }}>{i.desc}</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+            onPress={() => {
+              navigation.navigate("Screen04", {  id: i.id, todolist: todolist })
+            }}
+          >
+            <Image style={{ width: 20, height: 20, resizeMode: 'contain' }} source={require('./assets/edit.png')}></Image>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+           onPress={()=>{
+            for (let j = 0; j < userIn.length; j++) 
+              if (userIn[j].id === i.id)
+                userIn.splice(j, 1);
+            todolist.todo = userIn
+
+            fetch('https://65435c0201b5e279de2039f4.mockapi.io/api/v1/todolist/'+todolist.id, {
+              method: 'PUT',
+              headers: {'content-type':'application/json'},
+              body: JSON.stringify(todolist)
+              }).then(oke=>{
+                update(todolist.id);
+              }) 
+            }}
+          >
+            <Image style={{ width: 20, height: 20, resizeMode: 'contain' }} source={require('./assets/delete.png')}></Image>
+          </TouchableOpacity>
+         
         </View>
       )
     }
     else {
       checkboxes[i.id]=true;
       return (
-        <View style={{ flex: 1, height: 30, backgroundColor: '#6AEBF9', marginBottom: 10, borderRadius: 10, justifyContent: 'center' }}>
-          <TouchableOpacity style={{ flex: 1, position: 'absolute', right: 10, zIndex: 99 }}>
-            <Image style={{ width: 20, height: 20, resizeMode: 'contain' }} source={require('./assets/edit.png')}></Image>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
+        <View style={{ flex: 1, height: 30, backgroundColor: '#6AEBF9', marginBottom: 10, borderRadius: 10, justifyContent: 'center',flexDirection:'row',justifyContent:'space-between' }}>
+          <TouchableOpacity style={{ flex: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
             onPress={() => handleButtonPress(i)}
           >
             {checkboxes[i.id] && <Image style={{ left: 20, width: 20, height: 20, resizeMode: 'contain', position: 'absolute' }} source={require('./assets/check.png')}></Image>}
             {!checkboxes[i.id] && <Image style={{ left: 20, width: 20, height: 20, resizeMode: 'contain', position: 'absolute' }} source={require('./assets/Frame.png')}></Image>}
             <Text style={{ flex: 1, padding: 20, marginLeft: 40 }}>{i.desc}</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+            onPress={() => {
+              navigation.navigate("Screen04", {  id: i.id, todolist: todolist })
+            }}
+          >
+            <Image style={{ width: 20, height: 20, resizeMode: 'contain' }} source={require('./assets/edit.png')}></Image>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+           onPress={()=>{
+            for (let j = 0; j < userIn.length; j++) 
+              if (userIn[j].id === i.id)
+                userIn.splice(j, 1);
+            todolist.todo = userIn
+
+            fetch('https://65435c0201b5e279de2039f4.mockapi.io/api/v1/todolist/'+todolist.id, {
+              method: 'PUT',
+              headers: {'content-type':'application/json'},
+              body: JSON.stringify(todolist)
+              }).then(oke=>{
+                update(todolist.id);
+              }) 
+            }}
+          >
+            <Image style={{ width: 20, height: 20, resizeMode: 'contain' }} source={require('./assets/delete.png')}></Image>
+          </TouchableOpacity>
+         
         </View>
       )
     }
@@ -119,7 +183,10 @@ export default function App() {
        
       
       <TouchableOpacity style={{ alignItems: 'center' }}
-        onPress={() => { navigation.navigate("Screen03", { todolist: todolist, lenght:lenght})}}
+        onPress={() => {
+          navigation.navigate("Screen03",
+            { todolist: todolist });
+      }}
       >
         <Image source={require('./assets/plus.png')} style={{height:60,width:60,resizeMode:'contain'}}></Image>
       </TouchableOpacity>
