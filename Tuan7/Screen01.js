@@ -1,10 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
-import { StyleSheet, Text, View,Image, TextInput, TouchableOpacity } from 'react-native';
+import { useState,useContext} from 'react';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { MyContext } from './App';
 export default function App() {
+  let { todolist, setTodolist } = useContext(MyContext)
   let navigation = useNavigation()
   let [emailIn, setEmail] = useState('')
   let [DATA, setData] = useState([])
+
   fetch("https://65435c0201b5e279de2039f4.mockapi.io/api/v1/todolist")
     .then(response=>{
       if (response.ok)
@@ -32,9 +35,9 @@ export default function App() {
             () => {
               for (let i = 0; i < DATA.length; i++) {
                 if (DATA[i].email == emailIn) {
-                  const lenght=DATA[i].todo.lenght
-                  navigation.navigate("Screen02", { todolist: DATA[i],lenght:lenght })
-                  console.log(DATA[i]);
+                  setTodolist(DATA[i]);
+                  navigation.navigate("Screen02", { todolist: DATA[i] });
+                  // console.log(todolist);
                 }
               }
             }}
