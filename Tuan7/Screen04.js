@@ -38,7 +38,7 @@ export default function App() {
 .catch(error => {
   // Handle connection or processing errors
 });
-    navigation.navigate("Screen02");
+    navigation.navigate("Screen02", {todolist:todolist});
   }
   return (
     <View style={styles.container}>
