@@ -10,9 +10,11 @@ Todo-APP bao gồm các giao diện như:
 - Giao diện Quản lý tài khoản
 - Giao diện Đăng kí tài khoản
 -----------------------------------------------
--Trong giao diện chính có chức năng lọc việc đã làm, việc chưa làm, sắp xếp từ A-Z, Z-A
--App chưa áp dụng Redux hoặc Redux-Toolkit nên 1 số chức năng chưa thể tự động liền
--App chưa cho khả năng tự sửa lại ảnh
+-Trong giao diện chính có chức năng lọc việc đã làm, việc chưa làm, sắp xếp từ A-Z, Z-A.
+
+-App chưa áp dụng Redux hoặc Redux-Toolkit nên 1 số chức năng chưa thể tự động liền.
+
+-App chưa cho khả năng tự sửa lại ảnh.
 
 # Clone: git clone https://github.com/TranThienDatLaGi/Todo-app.git
 
